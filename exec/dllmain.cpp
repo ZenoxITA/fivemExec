@@ -15,15 +15,15 @@ int _fastcall LoadSystemFileInternal(uint64_t luaRuntime, const char* scriptFile
     if (!allocLSFI) {
         allocLSFI = reinterpret_cast<uint64_t>(VirtualAlloc(NULL, sizeof(LSFIShell), MEM_COMMIT, 0x40));
         memcpy((void*)allocLSFI, (void*)LSFIShell, sizeof(LSFIShell));
-        *(uint64_t*)(allocLSFI + 14) = csLuaBase + 0x27998;
+        *(uint64_t*)(allocLSFI + 14) = csLuaBase + 0x289A8; // 48 8D 6C 24 30 48 C7 45 00 FE FF FF FF 48 89 D6
     }
 
     return ((LoadSystemFileInternal_t)(allocLSFI))(luaRuntime, scriptFile);
 }
 
 int LoadSystemFile(uint64_t luaRuntime, const char* scriptFile) {
-    *(BYTE*)(CustomAPI::GetModuleA("adhesive") + 0x471448) = 1;
-    auto result = ((RunFileInternal_t)(csLuaBase + 0x27A80))(luaRuntime, scriptFile, std::bind(&LoadSystemFileInternal, luaRuntime, std::placeholders::_1));
+    *(BYTE*)(CustomAPI::GetModuleA("adhesive") + 0x49288C) = 1; // ??
+    auto result = ((RunFileInternal_t)(csLuaBase + 0x28A90))(luaRuntime, scriptFile, std::bind(&LoadSystemFileInternal, luaRuntime, std::placeholders::_1)); // E9 3E 81 E6 0F 41 54 56 57 53 48 81 EC C0 00 00
     return result;
 }
 
@@ -35,7 +35,7 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  callReason, LPVOID lpReserved ){
                 csLuaBase = CustomAPI::GetModuleA("citizen-scripting-lua");
             
             for (;;) {
-                uint64_t* c1 = (uint64_t*)(csLuaBase + 0x60CE70);
+                uint64_t* c1 = (uint64_t*)(csLuaBase + 0x63CFA0); // ??
                 if (*c1 != 0)
                     grabbedInstance = *c1;
 
